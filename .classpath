@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="Hello World/src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/programs/Java_ME_platform_SDK_3.0/lib/midp_2.0.jar"/>
+	<classpathentry kind="output" path="Hello World/classes"/>
+</classpath>
