@@ -5,9 +5,11 @@
 
 package com.sms.screen;
 
-import com.sms.interfaces.screen.IEnter;
+
+
 import com.sms.interfaces.screen.IScreen;
 import javax.microedition.lcdui.Command;
+import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Screen;
 
 /**
@@ -16,22 +18,16 @@ import javax.microedition.lcdui.Screen;
  */
 public abstract class AbstractScreen implements IScreen {
 
-    protected IEnter enter = null;
-    public AbstractScreen(IEnter midlet){
+    protected EntryScreen enter = null;
+    public AbstractScreen(EntryScreen midlet){
         enter = midlet;
     }
-
-     public Command[] commonCommand(){
-        Command select = new Command("Select", Command.ITEM, 1);
-        Command exit = new Command("Exit", Command.SCREEN, 1);
-        return new Command[]{select,exit};
-    }
-
     public void addCommonCommand(Screen screen){
-         Command[] command = commonCommand();
+         Command[] command = enter.commonCommand();
         for (int i=0;i<command.length;i++) {
           screen.addCommand(command[i]);
         }
     }
 
+     
 }

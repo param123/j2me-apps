@@ -5,22 +5,29 @@
 
 package com.sms.screen;
 
-import com.sms.interfaces.screen.IEnter;
+
+
+import com.sms.commands.SMSCommand;
 import com.sms.screen.list.ListItem;
 import com.sms.screen.list.SMSList;
+import javax.microedition.lcdui.Command;
+import javax.microedition.lcdui.CommandListener;
+import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.List;
 
 /**
  *
  * @author PKumar
  */
-public class MessageScreen extends AbstractScreen{
+public class MessageScreen extends AbstractScreen implements CommandListener {
 
     private SMSList itemList = null;
 
-    public MessageScreen(IEnter enter){
+    public MessageScreen(EntryScreen enter){
         super(enter);
     }
+
+    
 
     public boolean show() {
         itemList = new SMSList("Messages", List.IMPLICIT);
@@ -28,18 +35,31 @@ public class MessageScreen extends AbstractScreen{
         itemList.addItem(new ListItem("Compose", this));
         itemList.addItem(new ListItem("Sent", this));
         addCommonCommand(itemList);
+        itemList.setCommandListener(this);
         enter.getDisplay().setCurrent(itemList);
         return true;
     }
 
     public boolean action() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ListItem item = itemList.getListItem(itemList.getSelectedIndex());
+        if(item.getIScreen().show()){
+            destroy();
+        }
+        return true;
     }
 
     public boolean destroy() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        itemList = null;
+        return true;
     }
 
+    public void commandAction(Command c, Displayable d) {
+         System.out.println(c+" label : "+c.getLabel()+" commandType : "+c.getCommandType()+"  priority : "+c.getPriority());
+        if(c instanceof SMSCommand){
+          ((SMSCommand)c).execute(this);
+        }else{
+           
+        }
 
-
+    }
 }
