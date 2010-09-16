@@ -19,11 +19,11 @@ import javax.microedition.lcdui.List;
  *
  * @author PKumar
  */
-public class MessageScreen extends AbstractScreen implements CommandListener {
+public class MainScreen extends AbstractScreen implements CommandListener {
 
     private SMSList itemList = null;
 
-    public MessageScreen(EntryScreen enter){
+    public MainScreen(EntryScreen enter){
         super(enter);
     }
 
@@ -37,6 +37,7 @@ public class MessageScreen extends AbstractScreen implements CommandListener {
         addCommonCommand(itemList);
         itemList.setCommandListener(this);
         enter.getDisplay().setCurrent(itemList);
+
         return true;
     }
 

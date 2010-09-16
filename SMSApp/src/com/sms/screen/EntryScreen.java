@@ -22,7 +22,7 @@ public class EntryScreen extends MIDlet {
     
     public void startApp() {
         display = Display.getDisplay(this);
-        new MessageScreen(this).show();
+        new MainScreen(this).show();
     }
 
     public void pauseApp() {
