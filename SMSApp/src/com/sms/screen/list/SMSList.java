@@ -21,7 +21,7 @@ public class SMSList extends List{
     }
 
     public void addItem(ListItem item){
-        append(item.getItemName() , item.getImage());
+        append(item.toString() , item.getImage());
         itemList[count++]=item;
     }
 

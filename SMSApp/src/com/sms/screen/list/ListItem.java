@@ -30,7 +30,7 @@ public class ListItem {
          this.screen = iscreen;
     }
 
-    public String getItemName(){
+    public String toString(){
            return itemName;
     }
 

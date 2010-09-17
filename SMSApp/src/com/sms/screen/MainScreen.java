@@ -7,22 +7,28 @@ package com.sms.screen;
 
 
 
-import com.sms.commands.SMSCommand;
+
+
 import com.sms.screen.list.ListItem;
-import com.sms.screen.list.SMSList;
-import javax.microedition.lcdui.Command;
-import javax.microedition.lcdui.CommandListener;
-import javax.microedition.lcdui.Displayable;
-import javax.microedition.lcdui.List;
+import com.sun.lwuit.Command;
+import com.sun.lwuit.Form;
+import com.sun.lwuit.List;
+import com.sun.lwuit.events.ActionEvent;
+import com.sun.lwuit.layouts.BorderLayout;
+import com.sun.lwuit.list.DefaultListModel;
+
+
+
+
 
 /**
  *
  * @author PKumar
  */
-public class MainScreen extends AbstractScreen implements CommandListener {
+public class MainScreen extends AbstractScreen  {
 
-    private SMSList itemList = null;
-
+    private List itemList = null;
+    private Form mainForm = null;
     public MainScreen(EntryScreen enter){
         super(enter);
     }
@@ -30,37 +36,60 @@ public class MainScreen extends AbstractScreen implements CommandListener {
     
 
     public boolean show() {
-        itemList = new SMSList("Messages", List.IMPLICIT);
+        mainForm = new Form("Messages");
+        mainForm.setLayout(new BorderLayout());
+        
+        itemList = new List();
+        itemList.setFocus(true);
+        //itemList.setBorderPainted(true);
+        //itemList.setModel(new DefaultListModel());
         itemList.addItem(new ListItem("Inbox", this));
         itemList.addItem(new ListItem("Compose", this));
         itemList.addItem(new ListItem("Sent", this));
-        addCommonCommand(itemList);
-        itemList.setCommandListener(this);
-        enter.getDisplay().setCurrent(itemList);
+        itemList.addItem(new ListItem("Setting", this));
+//      itemList.adsetCommandListener(this);
+//      enter.getDisplay().setCurrent(itemList);
+        mainForm.addComponent(BorderLayout.CENTER,itemList);
+        mainForm.addCommand(enter.exit);
+        mainForm.addCommand(new Command("Select", 1){
+            public void actionPerformed(ActionEvent evt){
+               ListItem item = (ListItem)itemList.getSelectedItem();
+               destroy();
+               item.getIScreen().show();
+            }
+        });
 
+        mainForm.show();
         return true;
     }
 
-    public boolean action() {
-        ListItem item = itemList.getListItem(itemList.getSelectedIndex());
-        if(item.getIScreen().show()){
-            destroy();
-        }
-        return true;
-    }
+//    public Object[] getFormItem(){
+//        return new ListItem[]{new ListItem("Inbox", this),
+//                              new ListItem("Compose", this),
+//                              new ListItem("Sent", this),
+//                              new ListItem("Setting", this)};
+//    }
+
+//    public boolean action() {
+//        ListItem item = itemList.getListItem(itemList.getSelectedIndex());
+//        if(item.getIScreen().show()){
+//            destroy();
+//        }
+//        return true;
+//    }
 
     public boolean destroy() {
         itemList = null;
+        mainForm = null;
         return true;
     }
 
-    public void commandAction(Command c, Displayable d) {
-         System.out.println(c+" label : "+c.getLabel()+" commandType : "+c.getCommandType()+"  priority : "+c.getPriority());
-        if(c instanceof SMSCommand){
-          ((SMSCommand)c).execute(this);
-        }else{
-           
-        }
+   
 
-    }
+//    public void actionPerformed(ActionEvent event) {
+//        Command c = event.getCommand();
+//
+//    }
+
+    
 }

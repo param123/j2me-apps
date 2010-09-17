@@ -8,9 +8,7 @@ package com.sms.screen;
 
 
 import com.sms.interfaces.screen.IScreen;
-import javax.microedition.lcdui.Command;
-import javax.microedition.lcdui.CommandListener;
-import javax.microedition.lcdui.Screen;
+
 
 /**
  *
@@ -22,12 +20,13 @@ public abstract class AbstractScreen implements IScreen {
     public AbstractScreen(EntryScreen midlet){
         enter = midlet;
     }
-    public void addCommonCommand(Screen screen){
-         Command[] command = enter.commonCommand();
-        for (int i=0;i<command.length;i++) {
-          screen.addCommand(command[i]);
-        }
-    }
+    
+//    public void addCommonCommand(Screen screen){
+//         Command[] command = enter.commonCommand();
+//        for (int i=0;i<command.length;i++) {
+//          screen.addCommand(command[i]);
+//        }
+//    }
 
      
 }

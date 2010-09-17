@@ -13,8 +13,6 @@ public interface IScreen {
 
     public boolean show();
 
-    public boolean action();
-
     public boolean destroy();
 
 }
