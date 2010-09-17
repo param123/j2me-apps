@@ -19,6 +19,21 @@ public abstract class AbstractScreen implements IScreen {
     protected EntryScreen enter = null;
     public AbstractScreen(EntryScreen midlet){
         enter = midlet;
+        enter.registerScreen(this);
+    }
+    
+    public abstract boolean show();
+    
+    public final boolean launchUI(){
+    	boolean flag = show();
+    	if(flag){
+    	  afterLauncUI();
+    	}
+    	return flag;
+    }
+    
+    public void afterLauncUI(){
+    	enter.updateDisplayOrder(this);
     }
     
 //    public void addCommonCommand(Screen screen){

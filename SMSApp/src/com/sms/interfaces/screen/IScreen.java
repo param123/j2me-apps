@@ -11,8 +11,10 @@ package com.sms.interfaces.screen;
  */
 public interface IScreen {
 
-    public boolean show();
-
+	public boolean launchUI();
+	
     public boolean destroy();
+    
+    public String getName();
 
 }

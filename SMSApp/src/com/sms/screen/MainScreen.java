@@ -9,13 +9,13 @@ package com.sms.screen;
 
 
 
-import com.sms.screen.list.ListItem;
+import com.sms.interfaces.screen.IScreen;
 import com.sun.lwuit.Command;
 import com.sun.lwuit.Form;
 import com.sun.lwuit.List;
 import com.sun.lwuit.events.ActionEvent;
 import com.sun.lwuit.layouts.BorderLayout;
-import com.sun.lwuit.list.DefaultListModel;
+
 
 
 
@@ -43,22 +43,21 @@ public class MainScreen extends AbstractScreen  {
         itemList.setFocus(true);
         //itemList.setBorderPainted(true);
         //itemList.setModel(new DefaultListModel());
-        itemList.addItem(new ListItem("Inbox", this));
-        itemList.addItem(new ListItem("Compose", this));
-        itemList.addItem(new ListItem("Sent", this));
-        itemList.addItem(new ListItem("Setting", this));
+        itemList.addItem("Inbox");
+        itemList.addItem("Compose");
+        itemList.addItem("Sent");
+        itemList.addItem("Setting");
 //      itemList.adsetCommandListener(this);
 //      enter.getDisplay().setCurrent(itemList);
         mainForm.addComponent(BorderLayout.CENTER,itemList);
         mainForm.addCommand(enter.exit);
         mainForm.addCommand(new Command("Select", 1){
             public void actionPerformed(ActionEvent evt){
-               ListItem item = (ListItem)itemList.getSelectedItem();
-               destroy();
-               item.getIScreen().show();
+               Object itemName = itemList.getSelectedItem();
+                destroy();
+               ((IScreen)enter.getScreen(itemName)).launchUI();
             }
         });
-
         mainForm.show();
         return true;
     }
@@ -83,6 +82,13 @@ public class MainScreen extends AbstractScreen  {
         mainForm = null;
         return true;
     }
+
+
+
+	public String getName() {
+		// TODO Auto-generated method stub
+		return "Sms apps";
+	}
 
    
 
