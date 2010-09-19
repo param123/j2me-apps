@@ -1,31 +1,34 @@
 package com.sms.screen;
 
-import com.sms.interfaces.screen.IScreen;
+import com.sms.controller.AppController;
 import com.sun.lwuit.Form;
 
-public class SentScreen extends AbstractScreen implements IScreen {
+public class SentScreen extends AbstractScreen  {
 
-	public SentScreen(EntryScreen midlet) {
-		super(midlet);
-		// TODO Auto-generated constructor stub
+	Form sentScreen = null;
+	
+	public SentScreen(AppController appController) {
+		super(appController);
 	}
 
-	public boolean show() {
-		Form sentScreen = new Form("Sent");
-		enter.addCommonCommand(sentScreen);
-		sentScreen.show();
-		// TODO Auto-generated method stub
-		return true;
+	public void init() {
+		sentScreen = new Form(getName());
+		appController.addCommonCommand(sentScreen);
 	}
 
 	public boolean destroy() {
-		// TODO Auto-generated method stub
-		return false;
+		sentScreen = null;
+		return true;
 	}
 
 	public String getName() {
-		// TODO Auto-generated method stub
 		return "Sent";
+	}
+
+
+	public boolean show() {
+		sentScreen.show();
+		return true;		
 	}
 
 }

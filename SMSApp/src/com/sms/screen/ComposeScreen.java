@@ -1,18 +1,17 @@
 package com.sms.screen;
 
-import com.sms.interfaces.screen.IScreen;
+import com.sms.controller.AppController;
 import com.sun.lwuit.Form;
 
-public class ComposeScreen extends AbstractScreen implements IScreen {
+public class ComposeScreen extends AbstractScreen {
 
-	public ComposeScreen(EntryScreen midlet) {
-		super(midlet);
+	private Form compose = null;
+	
+	public ComposeScreen(AppController appController) {
+		super(appController);
 	}
 
 	public boolean show() {
-		
-		Form compose = new Form("Compose");
-		enter.addCommonCommand(compose);
 		compose.show();
 		return true;
 	}
@@ -23,6 +22,11 @@ public class ComposeScreen extends AbstractScreen implements IScreen {
 
 	public String getName() {
 		return "Compose";
+	}
+
+	protected void init() {
+		compose = new Form(getName());
+		appController.addCommonCommand(compose);		
 	}
 
 }

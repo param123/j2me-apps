@@ -5,6 +5,7 @@
 
 package com.sms.screen;
 
+import com.sms.controller.AppController;
 import com.sun.lwuit.Form;
 
 
@@ -17,16 +18,11 @@ public class InboxScreen extends AbstractScreen{
 
 	private Form inboxForm = null;
 
-
-    public InboxScreen(EntryScreen entryScreen){
-        super(entryScreen);
+    public InboxScreen(AppController appController){
+        super(appController);
     }
 
     public boolean show() {
-    	System.gc();
-        inboxForm = new Form("inbox");
-        enter.addCommonCommand(inboxForm);
-        enter.updateDisplayOrder(this);
     	inboxForm.show();
         return true;
     }
@@ -38,6 +34,11 @@ public class InboxScreen extends AbstractScreen{
 
 	public String getName() {
 		return "Inbox";
+	}
+
+	protected void init() {
+		inboxForm = new Form("inbox");
+		appController.addCommonCommand(inboxForm);
 	}
 
     

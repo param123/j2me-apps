@@ -5,16 +5,18 @@
 
 package com.sms.interfaces.screen;
 
+import com.sun.lwuit.Image;
+
 /**
  *
  * @author PKumar
  */
 public interface IScreen {
 
-	public boolean launchUI();
+	public boolean launchUI(boolean reload);
 	
     public boolean destroy();
     
     public String getName();
-
+    
 }
