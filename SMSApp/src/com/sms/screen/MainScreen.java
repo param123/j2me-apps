@@ -1,95 +1,69 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.sms.screen;
 
+import javax.microedition.midlet.MIDlet;
 
-
-
-
-import com.sms.screen.list.ListItem;
+import com.sms.controller.AppController;
+import com.sms.interfaces.screen.IParent;
+import com.sms.interfaces.screen.IScreen;
+import com.sms.util.Util;
+import com.sun.lwuit.Button;
 import com.sun.lwuit.Command;
 import com.sun.lwuit.Form;
-import com.sun.lwuit.List;
+import com.sun.lwuit.Label;
 import com.sun.lwuit.events.ActionEvent;
-import com.sun.lwuit.layouts.BorderLayout;
-import com.sun.lwuit.list.DefaultListModel;
+import com.sun.lwuit.events.ActionListener;
+import com.sun.lwuit.layouts.GridLayout;
 
 
-
-
-
-/**
- *
- * @author PKumar
- */
-public class MainScreen extends AbstractScreen  {
-
-    private List itemList = null;
-    private Form mainForm = null;
-    public MainScreen(EntryScreen enter){
-        super(enter);
+public class MainScreen implements ActionListener,IParent{
+	
+	
+	private MIDlet midlet = null;
+	private IScreen screens[] = null;
+	private AppController controller = null;
+		
+    public MainScreen(MIDlet midlet) {
+		this.midlet = midlet;
+		controller = new AppController(this);
+		screens = new IScreen[2];
+		screens[0] = new MessageScreen(controller);
+		screens[1] = new SettingScreen(controller);
+	}
+    
+    
+    public void displayUI(){
+    	Form mainForm = new Form("J2ME Apps");
+    	mainForm.setLayout(new GridLayout(3, 2));
+    	for (int i = 0; i < screens.length; i++) {
+			Button b = new Button(screens[i].getName(), Util.getInstance().getImage(screens[i].getName()+"_un"));
+			b.setUIID("J2MEID");
+	        b.setRolloverIcon(Util.getInstance().getImage(screens[i].getName()+"_sel"));
+	        b.setAlignment(Label.CENTER);
+	        b.setTextPosition(Label.BOTTOM);
+	        mainForm.addComponent(b);
+	        b.addActionListener(this);
+		}
+    	mainForm.show();
     }
-
     
 
-    public boolean show() {
-        mainForm = new Form("Messages");
-        mainForm.setLayout(new BorderLayout());
-        
-        itemList = new List();
-        itemList.setFocus(true);
-        //itemList.setBorderPainted(true);
-        //itemList.setModel(new DefaultListModel());
-        itemList.addItem(new ListItem("Inbox", this));
-        itemList.addItem(new ListItem("Compose", this));
-        itemList.addItem(new ListItem("Sent", this));
-        itemList.addItem(new ListItem("Setting", this));
-//      itemList.adsetCommandListener(this);
-//      enter.getDisplay().setCurrent(itemList);
-        mainForm.addComponent(BorderLayout.CENTER,itemList);
-        mainForm.addCommand(enter.exit);
-        mainForm.addCommand(new Command("Select", 1){
-            public void actionPerformed(ActionEvent evt){
-               ListItem item = (ListItem)itemList.getSelectedItem();
-               destroy();
-               item.getIScreen().show();
-            }
-        });
+	public void actionPerformed(ActionEvent event) {
+		Button src = (Button)event.getSource();
+		int buttonOrder = src.getParent().getComponentIndex(src);
+		IScreen screen = screens[buttonOrder];
+		screen.launchUI(false);	
+	}
 
-        mainForm.show();
-        return true;
-    }
 
-//    public Object[] getFormItem(){
-//        return new ListItem[]{new ListItem("Inbox", this),
-//                              new ListItem("Compose", this),
-//                              new ListItem("Sent", this),
-//                              new ListItem("Setting", this)};
-//    }
+	public Command getCommand() {
+		return exit;
+	}
 
-//    public boolean action() {
-//        ListItem item = itemList.getListItem(itemList.getSelectedIndex());
-//        if(item.getIScreen().show()){
-//            destroy();
-//        }
-//        return true;
-//    }
+	 
+	private Command exit = new Command("Exit", 1) {
+	      public void actionPerformed(ActionEvent evt){
+	          midlet.notifyDestroyed();
+	       }
+	};
 
-    public boolean destroy() {
-        itemList = null;
-        mainForm = null;
-        return true;
-    }
-
-   
-
-//    public void actionPerformed(ActionEvent event) {
-//        Command c = event.getCommand();
-//
-//    }
-
-    
 }

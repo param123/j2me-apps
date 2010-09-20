@@ -7,6 +7,7 @@ package com.sms.screen;
 
 
 
+import com.sms.controller.AppController;
 import com.sms.interfaces.screen.IScreen;
 
 
@@ -16,10 +17,32 @@ import com.sms.interfaces.screen.IScreen;
  */
 public abstract class AbstractScreen implements IScreen {
 
-    protected EntryScreen enter = null;
-    public AbstractScreen(EntryScreen midlet){
-        enter = midlet;
+    protected AppController appController = null;
+    public AbstractScreen(AppController appController){
+    	this.appController = appController;
+    	appController.registerScreen(this);
     }
+    
+    public abstract boolean show();
+    
+    protected abstract void init();
+    
+    public final boolean launchUI(boolean reload){
+    	init();
+    	maintainPreviousState(reload);
+    	boolean flag = show();
+    	if(flag){
+    	  afterLauncUI();
+    	}
+    	return flag;
+    }
+    
+    protected void afterLauncUI(){
+    	appController.updateDisplayOrder(this);
+    }
+    
+    protected void maintainPreviousState(boolean maintain){}
+    
     
 //    public void addCommonCommand(Screen screen){
 //         Command[] command = enter.commonCommand();

@@ -5,38 +5,42 @@
 
 package com.sms.screen;
 
-import javax.microedition.lcdui.Command;
-import javax.microedition.lcdui.CommandListener;
-import javax.microedition.lcdui.Displayable;
+import com.sms.controller.AppController;
+import com.sun.lwuit.Form;
+
+
 
 /**
  *
  * @author PKumar
  */
-public class InboxScreen extends AbstractScreen implements CommandListener{
+public class InboxScreen extends AbstractScreen{
 
+	private Form inboxForm = null;
 
-
-    public InboxScreen(EntryScreen entryScreen){
-        super(entryScreen);
+    public InboxScreen(AppController appController){
+        super(appController);
     }
 
     public boolean show() {
-
-        return true;
-    }
-
-    public boolean action() {
-        
+    	inboxForm.show();
         return true;
     }
 
     public boolean destroy() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        inboxForm = null;
+    	return true;
     }
 
-    public void commandAction(Command c, Displayable d) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+	public String getName() {
+		return "Inbox";
+	}
+
+	protected void init() {
+		inboxForm = new Form("inbox");
+		appController.addCommonCommand(inboxForm);
+	}
+
+    
 
 }
