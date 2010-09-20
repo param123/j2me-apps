@@ -39,12 +39,13 @@ public class MessageScreen extends AbstractScreen implements IParent  {
     public MessageScreen(AppController appController){
         super(appController);
     }
+
     
-   
     protected void init() {
     	childAppController = null;
     	childAppController = new AppController(this);
-    	childAppController.registerScreen(this);
+        childAppController.updateDisplayOrder(this);
+//    	childAppController.registerScreen(this);
         mainForm = new Form(getName());
         mainForm.setLayout(new BorderLayout());
         
@@ -52,16 +53,16 @@ public class MessageScreen extends AbstractScreen implements IParent  {
         itemList.addItem("Inbox");
         itemList.addItem("Compose");
         itemList.addItem("Sent");
+
         mainForm.addComponent(BorderLayout.CENTER,itemList);
-        appController.addCommonCommand(mainForm);
-        mainForm.addCommand(new Command("Select", 1){
+        mainForm.addCommand(new Command("Select"){
             public void actionPerformed(ActionEvent evt){
             	lastListItemSelected = itemList.getSelectedIndex();
                 Object itemName = itemList.getSelectedItem();
                 getChildScreen(itemName.toString()).launchUI(false);
             }
         });
-       
+        appController.addCommonCommand(mainForm);
     }
 
     public boolean destroy() {
@@ -90,17 +91,17 @@ public class MessageScreen extends AbstractScreen implements IParent  {
 		if(maintain){
 		  itemList.setSelectedIndex(lastListItemSelected);
 		}else{
-			lastListItemSelected = 0;
+		  lastListItemSelected = 0;
 		}
 	}
 
 	public boolean show() {
-		    mainForm.show();
+		mainForm.show();
 	        return true;
 	}
 
-	public Command getCommand() {
-		return appController.getParent().getCommand();
+	public void addCommand(Form form) {
+		
 	}
     
 }

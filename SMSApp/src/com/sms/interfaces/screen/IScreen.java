@@ -5,7 +5,7 @@
 
 package com.sms.interfaces.screen;
 
-import com.sun.lwuit.Image;
+
 
 /**
  *
@@ -13,7 +13,7 @@ import com.sun.lwuit.Image;
  */
 public interface IScreen {
 
-	public boolean launchUI(boolean reload);
+   public boolean launchUI(boolean reload);
 	
     public boolean destroy();
     

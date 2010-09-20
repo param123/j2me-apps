@@ -8,11 +8,14 @@ package com.sms.screen;
 
 
 
+import com.sms.controller.AppController;
+import com.sms.interfaces.screen.IParent;
+import com.sun.lwuit.Command;
 import javax.microedition.midlet.MIDlet;
 
-import com.sun.lwuit.Command;
 import com.sun.lwuit.Dialog;
 import com.sun.lwuit.Display;
+import com.sun.lwuit.Form;
 import com.sun.lwuit.events.ActionEvent;
 import com.sun.lwuit.plaf.UIManager;
 import com.sun.lwuit.util.Resources;
@@ -20,8 +23,9 @@ import com.sun.lwuit.util.Resources;
 /**
  * @author PKumar
  */
-public class EntryScreen extends MIDlet {
+public class EntryScreen extends MIDlet implements IParent {
 
+        private AppController appController = null;
 
 	public void startApp() {
         try{
@@ -30,11 +34,11 @@ public class EntryScreen extends MIDlet {
         UIManager.getInstance().setThemeProps(theme.getTheme(theme.getThemeResourceNames()[0]));
          Display.getInstance().callSerially(new Runnable() {
                 public void run() {
-                	new MainScreen(getInstance()).displayUI();
+                        appController = new AppController(getInstance());
+                	new MainScreen(appController).launchUI(true);
                 }
             });
-       
-        }catch(Exception ex){
+          }catch(Exception ex){
             ex.printStackTrace();
             Dialog.show("Exception", ex.getMessage(), "OK", null);
         }
@@ -51,5 +55,16 @@ public class EntryScreen extends MIDlet {
     public void destroyApp(boolean unconditional) {
         
     }
+
+       public void addCommand(Form form) {
+		form.addCommand(exit);
+	}
+
+
+	private Command exit = new Command("Exit") {
+	      public void actionPerformed(ActionEvent evt){
+	          notifyDestroyed();
+	       }
+	};
     
 }

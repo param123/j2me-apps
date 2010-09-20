@@ -20,7 +20,7 @@ public abstract class AbstractScreen implements IScreen {
     protected AppController appController = null;
     public AbstractScreen(AppController appController){
     	this.appController = appController;
-    	appController.registerScreen(this);
+//    	appController.registerScreen(this);
     }
     
     public abstract boolean show();
@@ -40,7 +40,7 @@ public abstract class AbstractScreen implements IScreen {
     protected void afterLauncUI(){
     	appController.updateDisplayOrder(this);
     }
-    
+      
     protected void maintainPreviousState(boolean maintain){}
     
     

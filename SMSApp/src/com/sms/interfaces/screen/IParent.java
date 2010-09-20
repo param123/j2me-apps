@@ -1,11 +1,10 @@
 package com.sms.interfaces.screen;
 
-import com.sun.lwuit.Command;
-
+import com.sun.lwuit.Form;
 
 
 public interface IParent {
 	
-	public Command getCommand();
+	public void addCommand(Form form);
 
 }
