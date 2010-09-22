@@ -14,6 +14,7 @@ public class SentScreen extends AbstractScreen  {
 	public void init() {
 		sentScreen = new Form(getName());
 		appController.addCommonCommand(sentScreen);
+                MainScreen.setTransition(sentScreen);
 	}
 
 	public boolean destroy() {

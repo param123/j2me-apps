@@ -30,7 +30,7 @@ public class EntryScreen extends MIDlet implements IParent {
 	public void startApp() {
         try{
         Display.init(this);
-        Resources theme = Resources.open("/LWUITtheme.res");
+        Resources theme = Resources.open("/javaTheme.res");
         UIManager.getInstance().setThemeProps(theme.getTheme(theme.getThemeResourceNames()[0]));
          Display.getInstance().callSerially(new Runnable() {
                 public void run() {

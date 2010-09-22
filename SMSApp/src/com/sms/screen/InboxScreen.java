@@ -39,6 +39,7 @@ public class InboxScreen extends AbstractScreen{
 	protected void init() {
 		inboxForm = new Form("inbox");
 		appController.addCommonCommand(inboxForm);
+                MainScreen.setTransition(inboxForm);
 	}
 
     

@@ -26,7 +26,8 @@ public class ComposeScreen extends AbstractScreen {
 
 	protected void init() {
 		compose = new Form(getName());
-		appController.addCommonCommand(compose);		
+		appController.addCommonCommand(compose);
+                MainScreen.setTransition(compose);
 	}
 
 }

@@ -28,6 +28,7 @@ public abstract class AbstractScreen implements IScreen {
     protected abstract void init();
     
     public final boolean launchUI(boolean reload){
+        System.gc();
     	init();
     	maintainPreviousState(reload);
     	boolean flag = show();

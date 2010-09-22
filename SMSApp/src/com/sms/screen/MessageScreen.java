@@ -62,6 +62,7 @@ public class MessageScreen extends AbstractScreen implements IParent  {
                 getChildScreen(itemName.toString()).launchUI(false);
             }
         });
+        MainScreen.setTransition(mainForm);
         appController.addCommonCommand(mainForm);
     }
 
