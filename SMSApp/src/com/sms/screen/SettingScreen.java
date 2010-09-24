@@ -4,17 +4,16 @@ package com.sms.screen;
 import com.sms.controller.AppController;
 import com.sun.lwuit.ButtonGroup;
 import com.sun.lwuit.Command;
-import com.sun.lwuit.Display;
+
 import com.sun.lwuit.Form;
 import com.sun.lwuit.Label;
+import com.sun.lwuit.M3G;
 import com.sun.lwuit.RadioButton;
-import com.sun.lwuit.animations.CommonTransitions;
-import com.sun.lwuit.animations.Transition3D;
 import com.sun.lwuit.events.ActionEvent;
 import com.sun.lwuit.events.ActionListener;
 import com.sun.lwuit.layouts.BoxLayout;
 import com.sun.lwuit.plaf.Style;
-import java.security.Key;
+
 
 public class SettingScreen extends AbstractScreen {
 	
@@ -58,7 +57,9 @@ public class SettingScreen extends AbstractScreen {
                 
                 final ButtonGroup radioButtonGroup = new ButtonGroup();
                 createRB("Default", radioButtonGroup, settingForm);
-                createRB("Cube", radioButtonGroup, settingForm);
+                if(M3G.isM3GSupported()){
+                  createRB("Cube", radioButtonGroup, settingForm);
+                }
                 radioButtonGroup.setSelected(0);
                 ActionListener actionListener = new ActionListener() {
 
@@ -73,10 +74,10 @@ public class SettingScreen extends AbstractScreen {
                                 break;
                                 
                             case 1:
-                                MainScreen.setTransitionValue(Transition3D.createCube(500, true),Transition3D.createCube(500, false));
+                                MainScreen.setTransitionValue(com.sun.lwuit.animations.Transition3D.createCube(500, true),com.sun.lwuit.animations.Transition3D.createCube(500, false));
 //                                 MainScreen.restorDefaultTransition();
-                                 ((Transition3D)MainScreen.getOutTransition()).setHighQualityMode(true);
-                                 ((Transition3D)MainScreen.getInTransition()).setHighQualityMode(true);
+                                 ((com.sun.lwuit.animations.Transition3D)MainScreen.getOutTransition()).setHighQualityMode(true);
+                                 ((com.sun.lwuit.animations.Transition3D)MainScreen.getInTransition()).setHighQualityMode(true);
                                 break;
                         }
                         MainScreen.setTransition(settingForm);
