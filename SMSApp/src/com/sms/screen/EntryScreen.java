@@ -31,6 +31,7 @@ public class EntryScreen extends MIDlet implements IParent {
         try{
         Display.init(this);
         Resources theme = Resources.open("/javaTheme.res");
+        UIManager.getInstance().getLookAndFeel().setReverseSoftButtons(true); 
         UIManager.getInstance().setThemeProps(theme.getTheme(theme.getThemeResourceNames()[0]));
          Display.getInstance().callSerially(new Runnable() {
                 public void run() {

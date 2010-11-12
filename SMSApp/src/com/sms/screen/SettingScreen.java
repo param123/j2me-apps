@@ -4,12 +4,17 @@ package com.sms.screen;
 import com.sms.controller.AppController;
 import com.sun.lwuit.ButtonGroup;
 import com.sun.lwuit.Command;
+
+
+import com.sun.lwuit.Component;
+
 import com.sun.lwuit.Form;
 import com.sun.lwuit.Label;
+import com.sun.lwuit.M3G;
 import com.sun.lwuit.RadioButton;
-import com.sun.lwuit.animations.Transition3D;
+
 import com.sun.lwuit.events.ActionEvent;
-import com.sun.lwuit.events.ActionListener;
+import com.sun.lwuit.events.FocusListener;
 import com.sun.lwuit.layouts.BoxLayout;
 import com.sun.lwuit.plaf.Style;
 
@@ -37,7 +42,17 @@ public class SettingScreen extends AbstractScreen {
 	}
 
         private RadioButton createRB(String label, ButtonGroup g, Form f) {
-            RadioButton b = new RadioButton(label);
+            final RadioButton b = new RadioButton(label);
+            b.addFocusListener(new FocusListener() {
+
+            public void focusGained(Component arg0) {
+               b.setSelected(true);
+            }
+
+            public void focusLost(Component arg0) {
+              b.setSelected(false);
+            }
+        });
             Style s = b.getStyle();
             s.setMargin(0, 0, 0, 0);
             s.setBgTransparency(70);
@@ -56,36 +71,27 @@ public class SettingScreen extends AbstractScreen {
                 
                 final ButtonGroup radioButtonGroup = new ButtonGroup();
                 createRB("Default", radioButtonGroup, settingForm);
-                createRB("Cube", radioButtonGroup, settingForm);
+                if(M3G.isM3GSupported()){
+                  createRB("Cube", radioButtonGroup, settingForm);
+                }
                 radioButtonGroup.setSelected(0);
-                ActionListener actionListener = new ActionListener() {
 
-                    public void actionPerformed(ActionEvent arg0) {
-                        System.out.println(arg0.getCommand());
-                        System.out.println(arg0.getSource());
-                        System.out.println(radioButtonGroup.getSelectedIndex());
-                        switch(radioButtonGroup.getSelectedIndex()){
+                settingForm.addCommand(new Command("Select"){
+                    public void actionPerformed(ActionEvent evt){
+	             switch(radioButtonGroup.getSelectedIndex()){
                             case 0:
                                 MainScreen.restorDefaultTransition();
-//                                MainScreen.setTransitionValue(CommonTransitions.createFade(400),CommonTransitions.createFade(400));
                                 break;
-                                
                             case 1:
-                                MainScreen.setTransitionValue(Transition3D.createCube(500, true),Transition3D.createCube(500, false));
-//                                 MainScreen.restorDefaultTransition();
-                                 ((Transition3D)MainScreen.getOutTransition()).setHighQualityMode(true);
-                                 ((Transition3D)MainScreen.getInTransition()).setHighQualityMode(true);
+                                MainScreen.setTransitionValue(com.sun.lwuit.animations.Transition3D.createCube(500, true),com.sun.lwuit.animations.Transition3D.createCube(500, false));
+                                 ((com.sun.lwuit.animations.Transition3D)MainScreen.getOutTransition()).setHighQualityMode(true);
+                                 ((com.sun.lwuit.animations.Transition3D)MainScreen.getInTransition()).setHighQualityMode(true);
                                 break;
                         }
                         MainScreen.setTransition(settingForm);
-                        //settingForm.setTransitionOutAnimator(null);
                         appController.back.actionPerformed(null);
-                    }
-                    
-                };
-                settingForm.addCommand(new Command("Select"));
-		appController.addCommonCommand(settingForm);
-                settingForm.setCommandListener(actionListener);
+	          }
+                });
                 MainScreen.setTransition(settingForm);
             }
 
