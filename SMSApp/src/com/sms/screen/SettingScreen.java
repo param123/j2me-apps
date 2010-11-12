@@ -4,17 +4,15 @@ package com.sms.screen;
 import com.sms.controller.AppController;
 import com.sun.lwuit.ButtonGroup;
 import com.sun.lwuit.Command;
-import com.sun.lwuit.Display;
 import com.sun.lwuit.Form;
 import com.sun.lwuit.Label;
 import com.sun.lwuit.RadioButton;
-import com.sun.lwuit.animations.CommonTransitions;
 import com.sun.lwuit.animations.Transition3D;
 import com.sun.lwuit.events.ActionEvent;
 import com.sun.lwuit.events.ActionListener;
 import com.sun.lwuit.layouts.BoxLayout;
 import com.sun.lwuit.plaf.Style;
-import java.security.Key;
+
 
 public class SettingScreen extends AbstractScreen {
 	
