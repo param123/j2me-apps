@@ -78,7 +78,7 @@ public class MainScreen extends AbstractScreen implements ActionListener,IParent
     }
 
     private String[] getChildScreensName(){
-       return new String[]{"SMS","Settings"};
+       return new String[]{"SMS","Settings","Games"};
     }
 
     private void launchChildScreen(int index){
@@ -89,6 +89,9 @@ public class MainScreen extends AbstractScreen implements ActionListener,IParent
                 break;
             case 1:
                 screen = new SettingScreen(appController);
+                break;
+            case 2:
+                screen = new GameScreen(appController);
                 break;
         }
         screen.launchUI(false);
