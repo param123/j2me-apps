@@ -89,6 +89,7 @@ public class SettingScreen extends AbstractScreen {
                         appController.back.actionPerformed(null);
 	          }
                 });
+                appController.addCommonCommand(settingForm);
                 MainScreen.setTransition(settingForm);
             }
 
