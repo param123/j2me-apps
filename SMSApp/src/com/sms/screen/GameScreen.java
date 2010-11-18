@@ -27,7 +27,7 @@ public class GameScreen extends AbstractScreen{
     }
 
     public boolean show() {
-
+        gameForm.show();
         return true;
     }
 
@@ -51,7 +51,9 @@ public class GameScreen extends AbstractScreen{
     }
 
     public boolean destroy() {
-
+        gameForm = null;
+        gameList = null;
+        
         return true;
     }
 
@@ -60,8 +62,7 @@ public class GameScreen extends AbstractScreen{
     }
 
     private IScreen getChildScreen(String screenName){
-		IScreen screen =null;
-		
+		IScreen screen = new SudokuScreen(appController);
 		return screen;
 	}
 
