@@ -30,7 +30,7 @@ public class SudokuAlgo {
 
 
 	
-	private void reshuffel(){
+	public void reshuffel(){
 		long time = System.currentTimeMillis();
 		int reminder = (int)(time % 10);
 		if(reminder==9){
@@ -44,6 +44,10 @@ public class SudokuAlgo {
 
 	}
 
+        public Region getRegion(int regNo){
+            return region[regNo];
+        }
+
 	private void print(){
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
@@ -54,7 +58,7 @@ public class SudokuAlgo {
 		}
 	}
 
-	private void init() {
+	public void init() {
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
 				cellBrick[i][j] = new Cell(i, j);
@@ -319,7 +323,7 @@ public class SudokuAlgo {
 
 	}
 
-	private class Cell {
+	public class Cell {
 
 		private int colNum = -1;
 		private int rowNum = -1;

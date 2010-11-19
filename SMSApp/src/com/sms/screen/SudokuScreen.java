@@ -6,6 +6,7 @@
 package com.sms.screen;
 
 import com.sms.controller.AppController;
+import com.sms.screen.algo.SudokuAlgo;
 import com.sms.screen.model.SudokuTableModel;
 import com.sun.lwuit.Form;
 import com.sun.lwuit.layouts.GridLayout;
@@ -18,34 +19,43 @@ import com.sun.lwuit.table.Table;
 public class SudokuScreen extends AbstractScreen {
 
     private Form sudokuForm = null;
-    
+    private SudokuAlgo sa = null;
 
     public SudokuScreen(AppController appController){
         super(appController);
     }
 
     public boolean show() {
-       sudokuForm.show();
+        sudokuForm.show();
        return true;
     }
 
     protected void init() {
+        sa = new SudokuAlgo();
+        sa.reshuffel();
+        sa.init();
         sudokuForm = new Form(getName());
-        //GridLayout layout = new GridLayout(3, 3);
+        
+        Table table = null;
+        SudokuTableModel stm = null;
         sudokuForm.setLayout(new GridLayout(3, 3));
         for(int i=0;i<9;i++){
-            Table table = new Table(new SudokuTableModel());
-            table.setLayout(new GridLayout(3, 3));
-            table.setIncludeHeader(false);
+            stm = new SudokuTableModel();
+            stm.setRegion(sa.getRegion(i));
+            table = new Table(stm,false);
+           // table.getStyle().setMargin(0, 0, 0, 0);
+            table.getStyle().setPadding(0, 0, 0, 0);
             table.setScrollable(false);
-            table.setVisible(true);
             sudokuForm.addComponent(i, table);
         }
 
+        MainScreen.setTransition(sudokuForm);
+        appController.addCommonCommand(sudokuForm);
     }
 
     public boolean destroy() {
        sudokuForm = null;
+       sa = null;
        return true;
     }
 
