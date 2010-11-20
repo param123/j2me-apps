@@ -11,7 +11,6 @@ import com.sun.lwuit.Form;
 import com.sun.lwuit.Label;
 import com.sun.lwuit.animations.CommonTransitions;
 import com.sun.lwuit.animations.Transition;
-import com.sun.lwuit.animations.Transition3D;
 import com.sun.lwuit.events.ActionEvent;
 import com.sun.lwuit.events.ActionListener;
 import com.sun.lwuit.layouts.GridLayout;

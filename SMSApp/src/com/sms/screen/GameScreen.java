@@ -22,12 +22,13 @@ public class GameScreen extends AbstractScreen{
     private List gameList = null;
     private Form gameForm = null;
     private int lastListItemSelected = 0;
+    
     public GameScreen(AppController appController){
         super(appController);
     }
 
     public boolean show() {
-
+        gameForm.show();
         return true;
     }
 
@@ -51,7 +52,8 @@ public class GameScreen extends AbstractScreen{
     }
 
     public boolean destroy() {
-
+        gameForm = null;
+        gameList = null;
         return true;
     }
 
