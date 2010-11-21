@@ -19,7 +19,7 @@ public class SudokuAlgo {
 	private Column column[] = new Column[9];
 	private Row row[] = new Row[9];
 
-	private final int VALUES[] = { 3, 5, 4, 1, 8, 6, 2, 7, 9 };
+	private int VALUES[] = { 3, 5, 4, 1, 8, 6, 2, 7, 9 };
 
 	private Vector NUMBERS = new Vector();
 	private Vector CHECKED_NUMBERS = new Vector();
@@ -28,9 +28,15 @@ public class SudokuAlgo {
 	private int currentRandomNumber = 0;
 	private Integer indexNumber = null;
 
+        public SudokuAlgo(){
+            init();
+            reshuffel(generateRandomNumber());
+            create();
+            randomFill();
+        }
 
 	
-	public void reshuffel(){
+	public int generateRandomNumber(){
 		long time = System.currentTimeMillis();
 		int reminder = (int)(time % 10);
 		if(reminder==9){
@@ -38,11 +44,40 @@ public class SudokuAlgo {
 		}else if(reminder ==0){
 			reminder++;
 		}
-		int temp = VALUES[reminder];
-		VALUES[reminder] = VALUES[0];
-		VALUES[0] = temp;
-
+                return reminder;
 	}
+
+        private void reshuffel(int changeNumber){
+               int temp = VALUES[changeNumber];
+		VALUES[changeNumber] = VALUES[0];
+		VALUES[0] = temp;
+        }
+
+        public void randomFill(){
+            for(int i=0;i<9;i++){
+                int ranNums[] = new int[3];
+                for(int j=0;j<3;j++){
+                    int ranNum = generateRandomNumber();
+                    if(!checkIfExist(ranNums, ranNum)){
+                        ranNums[j] = ranNum;
+                        row[i].getCell(new int[]{ranNum}).changeUserValueToReal();
+                    }else{
+                        j--;
+                    }
+                }
+                
+            }
+  
+        }
+
+        private boolean checkIfExist(int[] nums, int checkMe){
+            for (int i = 0; i < nums.length; i++) {
+                if(checkMe == nums[i]){
+                    return true;
+                }
+             }
+            return false;
+        }
 
         public Region getRegion(int regNo){
             return region[regNo];
@@ -330,6 +365,7 @@ public class SudokuAlgo {
 
 		private int realValue = -1;
 		private int tempValue = -1;
+                private int userValue = -1;
 
 		private Vector parent = new Vector();
 
@@ -362,8 +398,13 @@ public class SudokuAlgo {
 			realValue = tempValue;
 		}
 
+                public void changeUserValueToReal(){
+                    userValue = realValue;
+                }
+
 		public String toString(){
-			return String.valueOf(realValue);
+
+			return userValue==-1?"":String.valueOf(userValue);
 		}
 
 	}
