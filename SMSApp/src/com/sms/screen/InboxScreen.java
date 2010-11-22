@@ -5,7 +5,7 @@
 
 package com.sms.screen;
 
-import com.sms.MessageQueuer;
+
 import com.sms.controller.AppController;
 import com.sun.lwuit.Form;
 import com.sun.lwuit.List;
