@@ -83,6 +83,10 @@ public class SudokuAlgo {
             return region[regNo];
         }
 
+         public Row getRow(int rowNo){
+            return row[rowNo];
+        }
+
 	private void print(){
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
@@ -284,7 +288,7 @@ public class SudokuAlgo {
 
 	}
 
-	private class Row implements CellNotifier {
+	public class Row implements CellNotifier {
 
 		int rowNum = -1;
 		private Cell rowCells[] = new Cell[9];
@@ -360,8 +364,8 @@ public class SudokuAlgo {
 
 	public class Cell {
 
-		private int colNum = -1;
-		private int rowNum = -1;
+		public int colNum = -1;
+		public int rowNum = -1;
 
 		private int realValue = -1;
 		private int tempValue = -1;

@@ -11,10 +11,11 @@ import com.sms.controller.AppController;
 import com.sms.screen.algo.SudokuAlgo;
 
 import com.sms.screen.textfield.SudokuTextField;
+import com.sun.lwuit.Font;
 import com.sun.lwuit.Form;
 import com.sun.lwuit.TextField;
 import com.sun.lwuit.layouts.GridLayout;
-import com.sun.lwuit.plaf.Border;
+
 
 /**
  *
@@ -43,12 +44,10 @@ public class SudokuScreen extends AbstractScreen {
         sudokuForm.setLayout(new GridLayout(9, 9));
         for(int i=0;i<9;i++){
             for(int j=0;j<9;j++){
-                TextField tf = new SudokuTextField(1);
+                TextField tf = new SudokuTextField(1,sa.getRow(i).getCell(new int[]{j}));
                 tf.getStyle().setMargin(0, 0, 0, 0);
-                tf.getStyle().setPadding(0, 0, 0, 0);
-               // tf.getStyle().setBorder(Border.createLineBorder(1,0x000000),true);
-               // tf.setAlignment(TextField.CENTER);
-                
+                tf.getStyle().setPadding(5, 0, 7, 0);
+                tf.getStyle().setFont(Font.createSystemFont(Font.FACE_MONOSPACE,Font.STYLE_PLAIN,Font.SIZE_LARGE));
                 sudokuForm.addComponent(tf);
             }
         }
