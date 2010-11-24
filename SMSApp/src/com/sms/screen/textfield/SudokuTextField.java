@@ -18,18 +18,12 @@ public class SudokuTextField extends TextField{
 
    
     private Cell cell = null;
+    
 
-//    final private int TOP_LEFT = 11;
-//    final private int LEFT_BOTTOM = 12;
-//    final private int BOTTOM_RIGHT = 13;
-//    final private int RIGHT_TOP = 14;
-   
-
-    public SudokuTextField(int column, Cell cell){
+    public SudokuTextField( int column, Cell cell){
         super(column);
         this.cell = cell;
-        
-       }
+      }
 
     protected void paintBorder(Graphics g) {
        
@@ -42,7 +36,14 @@ public class SudokuTextField extends TextField{
                 height--;
                 for(int iter = 0 ; iter < 1 ; iter++) {
                     g.setColor(0x000000);
-                    g.drawRect(x, y, width, height);
+                    if(checkForBottom4Black()){
+                         g.drawLine(x, y+height, x+width, y+height);
+                    }
+
+                    if(checkForRight4Black()){
+                         g.drawLine(x+width, y, x+width, y+height);
+                    }
+                  //  g.drawRect(x, y, width, height);
                     g.setColor( 0xFFFFFF);
                     if(checkForBottom()){
                         g.drawLine(x, y+height, x+width, y+height);
@@ -57,53 +58,27 @@ public class SudokuTextField extends TextField{
                     if(checkForTop()){
                          g.drawLine(x, y, x+width, y);
                     }
-//                    switch(paintWhiteBorder()){
-////                        case TOP:
-////                            g.drawLine(x, y, x+width, y);
-////                            break;
-////                        case LEFT:
-////                             g.drawLine(x, y, x, y+height);
-////                             break;
-//                        case BOTTOM:
-//
-//                             break;
-//                        case RIGHT:
-//                            g.drawLine(x+width, y, x+width, y+height);
-//                            break;
-//                    }
-//                    g.drawLine(x, y+height, x+width, y+height);
-//                    g.setColor( 0xFFFFFF);
-//                    g.drawLine(x, y, x, y+height);
-//                    g.drawLine(x+width, y, x+width, y+height);
-                    width -= 2; height -= 2;
+
+                    width -= 1; height -= 1;
                 }
 
               g.setColor(originalColor);
     }
 
-    private boolean checkForBottom(){
+    private boolean checkForBottom4Black(){
+        return cell.rowNum >=0 && cell.rowNum <=7;
+    }
 
-//        if(cell.rowNum == 0 && cell.colNum == 0){
-//             return TOP_LEFT;
-//        }else if(cell.rowNum == 0 && cell.colNum ==8){
-//            return RIGHT_TOP;
-//        }else if(cell.rowNum ==2 && cell.colNum == 0 || cell.rowNum == 5 && cell.colNum ==0 || cell.rowNum ==8 && cell.colNum == 0){
-//            return LEFT_BOTTOM;
-//        }else if(cell.ro){
-//
-//        }
-//        else
+    private boolean checkForRight4Black(){
+        return cell.colNum >=0 && cell.colNum <=7;
+    }
+
+    private boolean checkForBottom(){
         
         if(cell.rowNum == 2 || cell.rowNum == 5 || cell.rowNum == 8){
              return true;
         }
-//        else if(cell.rowNum ==0 ){
-//            return TOP;
-//        }else if(cell.colNum == 0){
-//            return LEFT;
-//        }
-        
-      return false;
+        return false;
     }
 
     private boolean checkForRight(){
@@ -125,6 +100,22 @@ public class SudokuTextField extends TextField{
             return true;
         }
         return false;
+    }
+
+
+    public void keyPressed(int key){
+       
+        if(key>48 && key <58){
+            clear();
+         }
+    }
+
+    
+    public void keyReleased(int key){
+      
+        if(key>48 && key <58){
+            super.keyReleased(key);
+         }
     }
 
 }
