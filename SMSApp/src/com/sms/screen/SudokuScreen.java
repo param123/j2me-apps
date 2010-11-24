@@ -48,6 +48,8 @@ public class SudokuScreen extends AbstractScreen {
                 tf.getStyle().setMargin(0, 0, 0, 0);
                 tf.getStyle().setPadding(5, 0, 7, 0);
                 tf.getStyle().setFont(Font.createSystemFont(Font.FACE_MONOSPACE,Font.STYLE_PLAIN,Font.SIZE_LARGE));
+                tf.setInputMode("123");
+                tf.setReplaceMenu(false);
                 sudokuForm.addComponent(tf);
             }
         }
