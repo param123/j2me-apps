@@ -13,11 +13,11 @@ import com.sms.screen.algo.SudokuAlgo;
 import com.sms.screen.textfield.SudokuTextField;
 import com.sun.lwuit.Command;
 import com.sun.lwuit.Component;
+import com.sun.lwuit.Dialog;
 import com.sun.lwuit.Font;
 import com.sun.lwuit.Form;
 import com.sun.lwuit.TextField;
 import com.sun.lwuit.events.ActionEvent;
-import com.sun.lwuit.events.ActionListener;
 import com.sun.lwuit.events.FocusListener;
 import com.sun.lwuit.layouts.GridLayout;
 
@@ -32,15 +32,13 @@ public class SudokuScreen extends AbstractScreen implements FocusListener {
     private Form sudokuForm = null;
     private SudokuAlgo sa = null;
     private TextField selectedField = null;
-
+    private boolean focusSet = false;
     public SudokuScreen(AppController appController){
         super(appController);
     }
 
     public boolean show() {
-
         sudokuForm.show();
-
        return true;
     }
 
@@ -59,13 +57,18 @@ public class SudokuScreen extends AbstractScreen implements FocusListener {
                 tf.setReplaceMenu(true);
                 tf.addFocusListener(this);
                 sudokuForm.addComponent(tf);
+                if(tf.isFocusable() && !focusSet){
+                    selectedField = tf;
+                    focusSet= true;
+                }
             }
         }
    
-        sudokuForm.addCommand(new Command("clear"){
+        sudokuForm.addCommand(new Command("check"){
             public void actionPerformed(ActionEvent evt){
-                System.out.println(evt.getKeyEvent());
-                selectedField.clear();
+              boolean flag = sa.check();
+              String msg = flag?"Congrats you win.":"Something went wrong.";
+              Dialog.show("Message", msg, Dialog.TYPE_INFO, null, "Okay", null);
             }
         });
         MainScreen.setTransition(sudokuForm);
@@ -87,11 +90,11 @@ public class SudokuScreen extends AbstractScreen implements FocusListener {
     public void focusGained(Component arg0) {
        this.selectedField = (TextField)arg0;
        selectedField.setFocus(true);
+       
     }
 
     public void focusLost(Component arg0) {
-          ((TextField)arg0).setFocusable(false);
-
+       arg0.setFocus(false);
     }
 
 }

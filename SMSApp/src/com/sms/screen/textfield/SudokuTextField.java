@@ -23,15 +23,26 @@ public class SudokuTextField extends TextField{
     public SudokuTextField( int column, Cell cell){
         super(column);
         this.cell = cell;
+        setText(cell.toString());
+        
+        if(cell.toString().length()>0){
+            setEditable(false);
+            setFocusable(false);
+            getStyle().setFgColor(0x3D8BFF);//, true);
+          }
       }
 
+   
+
     protected void paintBorder(Graphics g) {
-       
-            int originalColor = g.getColor();
+
+        int originalColor = g.getColor();
+
         int x = getX();
         int y = getY();
         int width = getWidth();
         int height = getHeight();
+        
                 width--;
                 height--;
                 for(int iter = 0 ; iter < 1 ; iter++) {
@@ -43,7 +54,7 @@ public class SudokuTextField extends TextField{
                     if(checkForRight4Black()){
                          g.drawLine(x+width, y, x+width, y+height);
                     }
-                  //  g.drawRect(x, y, width, height);
+                 
                     g.setColor( 0xFFFFFF);
                     if(checkForBottom()){
                         g.drawLine(x, y+height, x+width, y+height);
@@ -104,8 +115,8 @@ public class SudokuTextField extends TextField{
 
 
     public void keyPressed(int key){
-       
-        if(key>48 && key <58){
+       System.out.println("key=="+key);
+        if(key>48 && key <58 && key == -9){
             clear();
          }
     }

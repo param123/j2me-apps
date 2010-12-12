@@ -31,6 +31,7 @@ public class SudokuAlgo {
         public SudokuAlgo(){
             init();
             reshuffel(generateRandomNumber());
+            reshuffel(generateRandomNumber());
             create();
             randomFill();
         }
@@ -51,13 +52,14 @@ public class SudokuAlgo {
                int temp = VALUES[changeNumber];
 		VALUES[changeNumber] = VALUES[0];
 		VALUES[0] = temp;
-        }
+           }
 
         public void randomFill(){
+           
             for(int i=0;i<9;i++){
-                int ranNums[] = new int[3];
-                for(int j=0;j<3;j++){
-                    int ranNum = generateRandomNumber();
+                int ranNums[] = new int[4];
+                for(int j=0;j<4;j++){
+                    int ranNum = randomGenerator.nextInt(9);
                     if(!checkIfExist(ranNums, ranNum)){
                         ranNums[j] = ranNum;
                         row[i].getCell(new int[]{ranNum}).changeUserValueToReal();
@@ -67,8 +69,7 @@ public class SudokuAlgo {
                 }
                 
             }
-  
-        }
+          }
 
         private boolean checkIfExist(int[] nums, int checkMe){
             for (int i = 0; i < nums.length; i++) {
@@ -407,11 +408,25 @@ public class SudokuAlgo {
                 }
 
 		public String toString(){
-
 			return userValue==-1?"":String.valueOf(userValue);
 		}
 
+                private boolean userAndActualMatch(){
+                    return userValue == realValue;
+                }
+
 	}
+
+        public boolean check(){
+           for(int i=0;i<9;i++){
+              for(int j=0;j<9;j++){
+                 if(!cellBrick[i][j].userAndActualMatch()){
+                     return false;
+                 }
+              }
+           }
+            return true;
+        }
 
 }
 
