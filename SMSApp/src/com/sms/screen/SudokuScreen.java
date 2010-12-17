@@ -63,16 +63,23 @@ public class SudokuScreen extends AbstractScreen implements FocusListener {
                 }
             }
         }
-   
-        sudokuForm.addCommand(new Command("check"){
+
+         appController.addCommonCommand(sudokuForm);
+
+        sudokuForm.addCommand(new Command("Check"){
             public void actionPerformed(ActionEvent evt){
               boolean flag = sa.check();
               String msg = flag?"Congrats you win.":"Something went wrong.";
-              Dialog.show("Message", msg, Dialog.TYPE_INFO, null, "Okay", null);
+              Dialog.show("Message", msg, Dialog.TYPE_INFO, null, "Ok", null);
+            }
+        });
+        sudokuForm.addCommand(new Command("Clear"){
+            public void actionPerformed(ActionEvent evt){
+               selectedField.clear();
             }
         });
         MainScreen.setTransition(sudokuForm);
-        appController.addCommonCommand(sudokuForm);
+       
     }
 
     public boolean destroy() {

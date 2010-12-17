@@ -30,7 +30,9 @@ public class SudokuAlgo {
 
         public SudokuAlgo(){
             init();
-            reshuffel(generateRandomNumber());
+            int number = randomGenerator.nextInt(9);
+            number=number==0?number+1:number;
+            reshuffel(number);
             reshuffel(generateRandomNumber());
             create();
             randomFill();
@@ -48,17 +50,18 @@ public class SudokuAlgo {
                 return reminder;
 	}
 
-        private void reshuffel(int changeNumber){
+          private void reshuffel(int changeNumber){
                int temp = VALUES[changeNumber];
 		VALUES[changeNumber] = VALUES[0];
 		VALUES[0] = temp;
            }
 
         public void randomFill(){
-           
+
+            //fill row
             for(int i=0;i<9;i++){
                 int ranNums[] = new int[4];
-                for(int j=0;j<4;j++){
+                for(int j=0;j<ranNums.length;j++){
                     int ranNum = randomGenerator.nextInt(9);
                     if(!checkIfExist(ranNums, ranNum)){
                         ranNums[j] = ranNum;
@@ -69,7 +72,27 @@ public class SudokuAlgo {
                 }
                 
             }
-          }
+
+            //fill column
+            int counter = 2;
+            while(counter-->0){
+                int count = randomGenerator.nextInt(9);
+                count = count <2 ? 2 : count;
+                count = count>7? 7: count;
+                int colNums[] = new int[count];
+                int randomColumn = 0;
+                if(count ==1){
+                  randomColumn = randomGenerator.nextInt(9);
+                }
+                for(int i=0;i<count;i++){
+                       int random = randomGenerator.nextInt(9);
+                       if(!checkIfExist(colNums, random)){
+                            colNums[i] = random;
+                            column[randomColumn].getCell(new int[]{random}).changeUserValueToReal();
+                        }
+              }
+           }
+        }
 
         private boolean checkIfExist(int[] nums, int checkMe){
             for (int i = 0; i < nums.length; i++) {
@@ -91,7 +114,7 @@ public class SudokuAlgo {
 	private void print(){
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
-				System.out.print("|"+cellBrick[i][j].toString());
+				System.out.print("|"+cellBrick[i][j].toStringReal());
 			}
 			System.out.println();
 			System.out.println(" - - - - - - - - - ");
@@ -116,31 +139,50 @@ public class SudokuAlgo {
 		for (int i = 0; i < 9; i++) {
 			generateNUMBERS();
 			for (int j = 0; j < 9; j++) {
+                            System.out.println("column "+j+" row "+i);
 				while (true) {
-				try{
-					getRandomNumber();
-				}catch(Exception e){
-					print();
-					throw new RuntimeException(e.getMessage());
-				}
-					if (cellBrick[i][j].update(currentRandomNumber)) {
-						cellBrick[i][j].commit();
-						break;
-					} else {
-                       if(backtrack(cellBrick[i][j])){
-                    	   break;
-                       }
-					}
-				}
+//				try{
+                                     if(!getRandomNumber()){
+    //				}catch(Exception e){
+    //					print();
+    //                                        e.printStackTrace();
+    //					throw new RuntimeException(e.getMessage());
+    //				}
+                                      if (cellBrick[i][j].update(currentRandomNumber)) {
+                                                    cellBrick[i][j].commit();
+                                                    break;
+                                       } else {
+                                           if(backtrack(cellBrick[i][j])){
+                                                  break;
+                                               }
+                                            }
+                                    }else{
+//                                       CHECKED_NUMBERS.removeAllElements();
+//                                       generateNUMBERS();
+                                         i--;
+                                         for(int k =0;k<j;k++){
+                                               cellBrick[i][k].changeValueDirectly(-1);
+                                          }
+                                         break;
+                                    }
+                                }
+
+
+
 				CHECKED_NUMBERS.removeElement(indexNumber);
                                 for(int a=0;a<CHECKED_NUMBERS.size();a++){
-				NUMBERS.addElement(CHECKED_NUMBERS.elementAt(a));
+				 NUMBERS.addElement(CHECKED_NUMBERS.elementAt(a));
                                 }
 				CHECKED_NUMBERS.removeAllElements();
 				indexNumber = null;
 			}
 		}
 	}
+
+        public boolean checkUpdate(){
+            
+            return true;
+        }
 
 	private boolean backtrack(Cell cell) {
             if(cell.colNum>0){
@@ -153,9 +195,9 @@ public class SudokuAlgo {
 	                		cell.commit();
 	                		return true;
 	    				}else{
-	    					previousCell.changeValueDirectly(value);
+	    				  previousCell.changeValueDirectly(value);
 	    				}
-					}
+			}
             	}
             }
           return false;
@@ -163,24 +205,30 @@ public class SudokuAlgo {
 
 	private void generateNUMBERS() {
 		NUMBERS.removeAllElements();
+                CHECKED_NUMBERS.removeAllElements();
 		for (int i = 0; i < 9; i++) {
 			NUMBERS.addElement(Integer.valueOf(String.valueOf(VALUES[i])));
 		}
 	}
 
-	private int getRandomNumber() {
-		int index = randomGenerator.nextInt(NUMBERS.size());
-		indexNumber = (Integer) NUMBERS.elementAt(index);
-		currentRandomNumber = indexNumber.intValue();
-		NUMBERS.removeElementAt(index);
-		CHECKED_NUMBERS.addElement(indexNumber);
-		return currentRandomNumber;
+	private boolean getRandomNumber() {
+                boolean flag = NUMBERS.size()==0;
+                if(!flag){
+                    int index = randomGenerator.nextInt(NUMBERS.size());
+                    indexNumber = (Integer) NUMBERS.elementAt(index);
+                    currentRandomNumber = indexNumber.intValue();
+                     System.out.println("Random "+currentRandomNumber);
+                    NUMBERS.removeElementAt(index);
+                    CHECKED_NUMBERS.addElement(indexNumber);
+                }
+		return flag;
 	}
 
 	private interface CellNotifier {
 		public boolean validateCell(Cell cell);
 		public void assignCell();
                 public Cell getCell(int[] cellAddress);
+                public boolean validateUserInput(Cell cell);
 	}
 
 	public class Region implements CellNotifier {
@@ -287,6 +335,18 @@ public class SudokuAlgo {
                getCell(cellAddress).changeValueDirectly(value);
             }
 
+        public boolean validateUserInput(Cell cell) {
+            for (int i = 0; i < 3; i++) {
+				for (int j = 0; j < 3; j++) {
+					if (regCells[i][j] != cell
+							&& regCells[i][j].userValue == cell.userValue) {
+						return false;
+					}
+				}
+	      }
+			return true;
+        }
+
 	}
 
 	public class Row implements CellNotifier {
@@ -324,6 +384,16 @@ public class SudokuAlgo {
                getCell(cellAddress).changeValueDirectly(value);
             }
 
+        public boolean validateUserInput(Cell cell) {
+            for (int i = 0; i < 9; i++) {
+				if (rowCells[i] != cell
+						&& rowCells[i].userValue == cell.userValue) {
+					return false;
+				}
+			}
+			return true;
+           }
+
 	}
 
 	private class Column implements CellNotifier {
@@ -360,6 +430,16 @@ public class SudokuAlgo {
         public void setCell(int[] cellAddress, int value) {
                getCell(cellAddress).changeValueDirectly(value);
             }
+
+        public boolean validateUserInput(Cell cell) {
+            for (int i = 0; i < 9; i++) {
+				if (colCells[i] != cell
+						&& colCells[i].userValue == cell.userValue) {
+					return false;
+				}
+		}
+			return true;
+        }
 
 	}
 
@@ -411,21 +491,42 @@ public class SudokuAlgo {
 			return userValue==-1?"":String.valueOf(userValue);
 		}
 
-                private boolean userAndActualMatch(){
-                    return userValue == realValue;
+                public String toStringReal(){
+			return String.valueOf(realValue);
+		}
+
+                public boolean validateUserInput(){
+                    if(userValue==-1){
+                        return false;
+                    }
+                      for (int i=0;i<parent.size();i++) {
+				CellNotifier cellParent = (CellNotifier) parent.elementAt(i);
+				if (!cellParent.validateUserInput(this)) {
+					return false;
+				}
+		     }
+
+			return true;
+                }
+
+                public void setUserValue(int uv){
+                    this.userValue = uv;
                 }
 
 	}
 
         public boolean check(){
-           for(int i=0;i<9;i++){
-              for(int j=0;j<9;j++){
-                 if(!cellBrick[i][j].userAndActualMatch()){
-                     return false;
-                 }
-              }
-           }
-            return true;
+
+              for (int i = 0; i < cellBrick.length; i++) {
+                  for (int j = 0; j < cellBrick[i].length; j++) {
+                      Cell cell = cellBrick[i][j];
+                      if(!cell.validateUserInput()){
+                          return false;
+                      }
+                  }
+            }
+
+	   return true;
         }
 
 }
