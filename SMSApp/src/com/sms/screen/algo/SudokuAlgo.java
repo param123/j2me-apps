@@ -9,8 +9,18 @@ package com.sms.screen.algo;
  *
  * @author PKumar
  */
+import com.sms.message.IMessage;
+import com.sun.lwuit.Dialog;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Vector;
 import java.util.Random;
+import javax.microedition.rms.RecordEnumeration;
+import javax.microedition.rms.RecordStore;
+import javax.microedition.rms.RecordStoreException;
 
 public class SudokuAlgo {
 
@@ -30,12 +40,14 @@ public class SudokuAlgo {
 
         public SudokuAlgo(){
             init();
-            int number = randomGenerator.nextInt(9);
-            number=number==0?number+1:number;
-            reshuffel(number);
-            reshuffel(generateRandomNumber());
-            create();
-            randomFill();
+            if(!populate()){
+                int number = randomGenerator.nextInt(9);
+                number=number==0?number+1:number;
+                reshuffel(number);
+                reshuffel(generateRandomNumber());
+                create();
+                randomFill();
+            }
         }
 
 	
@@ -139,7 +151,7 @@ public class SudokuAlgo {
 		for (int i = 0; i < 9; i++) {
 			generateNUMBERS();
 			for (int j = 0; j < 9; j++) {
-                            System.out.println("column "+j+" row "+i);
+//                            System.out.println("column "+j+" row "+i);
 				while (true) {
 //				try{
                                      if(!getRandomNumber()){
@@ -217,7 +229,7 @@ public class SudokuAlgo {
                     int index = randomGenerator.nextInt(NUMBERS.size());
                     indexNumber = (Integer) NUMBERS.elementAt(index);
                     currentRandomNumber = indexNumber.intValue();
-                     System.out.println("Random "+currentRandomNumber);
+//                     System.out.println("Random "+currentRandomNumber);
                     NUMBERS.removeElementAt(index);
                     CHECKED_NUMBERS.addElement(indexNumber);
                 }
@@ -451,6 +463,7 @@ public class SudokuAlgo {
 		private int realValue = -1;
 		private int tempValue = -1;
                 private int userValue = -1;
+                private boolean editable = true;
 
 		private Vector parent = new Vector();
 
@@ -471,7 +484,6 @@ public class SudokuAlgo {
 					return false;
 				}
 			}
-
 			return true;
 		}
 
@@ -485,6 +497,7 @@ public class SudokuAlgo {
 
                 public void changeUserValueToReal(){
                     userValue = realValue;
+                    editable = false;
                 }
 
 		public String toString(){
@@ -505,12 +518,19 @@ public class SudokuAlgo {
 					return false;
 				}
 		     }
-
 			return true;
                 }
 
                 public void setUserValue(int uv){
                     this.userValue = uv;
+                }
+
+                public boolean editable(){
+                    return editable;
+                }
+
+                 public void setEditable(boolean e){
+                     editable = e;
                 }
 
 	}
@@ -527,6 +547,93 @@ public class SudokuAlgo {
             }
 
 	   return true;
+        }
+
+        public byte[] save() throws IOException{
+            
+            ByteArrayOutputStream outputStream = null;
+            DataOutputStream outputDataStream = null;
+            byte b[] = null;
+             try {
+             outputStream = new ByteArrayOutputStream();
+             outputDataStream = new DataOutputStream(outputStream);
+             
+             for(int i=0;i<9;i++){
+                   for(int j=0;j<9;j++){
+                       outputDataStream.writeBoolean(cellBrick[i][j].editable());
+                       outputDataStream.writeInt(cellBrick[i][j].userValue);
+                       outputDataStream.flush();
+                    }
+                    }
+                 b = outputStream.toByteArray();
+                } finally{
+                    if(outputStream!=null){
+                        try {
+                            outputStream.close();
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+
+                    if(outputDataStream!=null){
+                try {
+                    outputDataStream.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                    }
+                }
+            return b;
+        }
+
+        private boolean populate(){
+                RecordStore rs;
+                boolean flag = false;
+            try {
+                 rs = RecordStore.openRecordStore(IMessage.GAME_RECORD, true);
+                 RecordEnumeration re = rs.enumerateRecords(null, null, false);
+                  while(re.hasNextElement()){
+                            int recordId = re.nextRecordId();
+                            System.out.println("Found Record ID == "+recordId);
+                            byte b[] = rs.getRecord(recordId);
+                            ByteArrayInputStream inputStream = null;
+                            DataInputStream inputDataStream =null;
+                          try {
+                             inputStream = new ByteArrayInputStream(b);
+                             inputDataStream  = new DataInputStream(inputStream);
+                                for(int i=0;i<9;i++){
+                                    for(int j=0;j<9;j++){
+                                     boolean editable = inputDataStream.readBoolean();
+                                     int number = inputDataStream.readInt();
+                                      cellBrick[i][j].setUserValue(number);
+                                      cellBrick[i][j].setEditable(editable);
+                                    }
+                                }
+                             } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }finally{
+                            if(inputStream!=null){
+                                try {
+                                    inputStream.close();
+                                } catch (IOException ex) {
+                                    Dialog.show(IMessage.TITLE_ERROR, "Error while saving", Dialog.TYPE_ERROR, null, "Ok", null);
+                                }
+                            }
+
+                            if(inputDataStream !=null){
+                                try {
+                                    inputDataStream.close();
+                                } catch (IOException ex) {
+                                   Dialog.show(IMessage.TITLE_ERROR, "Error while saving", Dialog.TYPE_ERROR, null, "Ok", null);
+                                }
+                            }
+                        }
+                        flag = true;
+                  }
+            } catch (RecordStoreException ex) {
+                Dialog.show(IMessage.TITLE_ERROR, "Error while saving", Dialog.TYPE_ERROR, null, "Ok", null);
+            }
+                return flag;
         }
 
 }

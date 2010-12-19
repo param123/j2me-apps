@@ -18,5 +18,7 @@ public interface IScreen {
     public boolean destroy();
     
     public String getName();
+
+    public boolean callBack();
     
 }

@@ -7,4 +7,4 @@ public interface IParent {
 	
 	public void addCommand(Form form);
 
-}
+   }

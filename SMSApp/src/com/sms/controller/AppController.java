@@ -40,12 +40,14 @@ public class AppController {
 
 	    public Command back = new Command("Back", 1) {
 	        public void actionPerformed(ActionEvent evt){
-	            IScreen current = displayOrder[--stackSize];
-	            displayOrder[stackSize] = null;
-	            IScreen previous = displayOrder[--stackSize];
-	            displayOrder[stackSize] = null;
-	            previous.launchUI(true);
-                    current.destroy();
+                    IScreen current = displayOrder[--stackSize];
+                    if(current.callBack()){
+                        displayOrder[stackSize] = null;
+                        IScreen previous = displayOrder[--stackSize];
+                        displayOrder[stackSize] = null;
+                        previous.launchUI(true);
+                        current.destroy();
+                    }
 	         }
 	      };
 

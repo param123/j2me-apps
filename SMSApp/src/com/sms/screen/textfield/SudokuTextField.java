@@ -18,17 +18,17 @@ public class SudokuTextField extends TextField{
 
    
     private Cell cell = null;
-    private boolean editable = true;
+    
 
     public SudokuTextField( int column, Cell cell){
         super(column);
         this.cell = cell;
         setText(cell.toString());
-        
-        if(cell.toString().length()>0){
+       
+        if(!cell.editable()){
            // setEditable(false);
            // setFocusable(false);
-            editable = false;
+//            editable = false;
             getStyle().setFgColor(0x000033);//, true);
             
           }
@@ -118,19 +118,25 @@ public class SudokuTextField extends TextField{
 
     public void keyPressed(int key){
        System.out.println("key=="+key);
-        if(editable && key>48 && key <58 && key == -9){
+       
+        if(cell.editable() && key>48 && key <58 && key == -9){
             clear();
+             cell.setUserValue(-1);
          }
     }
 
     
     public void keyReleased(int key){
        System.out.println("keyPressed=="+key);
-        if(editable && key == -9){
+
+        if(cell.editable() && key == -9){
             clear();
+              cell.setUserValue(-1);
+            
         }
-        if(editable && key>48 && key <58){
+        if(cell.editable() && key>48 && key <58){
              clear();
+               cell.setUserValue(-1);
             super.keyReleased(key);
             cell.setUserValue(Integer.valueOf(getText()).intValue());
          }

@@ -67,5 +67,6 @@ public class EntryScreen extends MIDlet implements IParent {
 	          notifyDestroyed();
 	       }
 	};
-    
+
+
 }

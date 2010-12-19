@@ -44,7 +44,9 @@ public abstract class AbstractScreen implements IScreen {
       
     protected void maintainPreviousState(boolean maintain){}
     
-    
+    public boolean callBack(){
+        return true;
+    }
 //    public void addCommonCommand(Screen screen){
 //         Command[] command = enter.commonCommand();
 //        for (int i=0;i<command.length;i++) {
